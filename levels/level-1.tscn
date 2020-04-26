@@ -28,26 +28,29 @@ region_rect = Rect2( 0, 0, 256, 544 )
 
 [node name="hud" type="CanvasLayer" parent="."]
 
-[node name="hud_container" type="Control" parent="hud"]
+[node name="respanw_screen" type="Control" parent="hud"]
 margin_right = 160.0
 margin_bottom = 320.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="respawn_hud" type="CenterContainer" parent="hud/hud_container"]
-margin_right = 160.0
-margin_bottom = 320.0
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="overlay" type="ColorRect" parent="hud/hud_container/respawn_hud"]
+[node name="overlay" type="ColorRect" parent="hud/respanw_screen"]
 margin_right = 160.0
 margin_bottom = 320.0
 color = Color( 0.0862745, 0.0196078, 0.0196078, 0.627451 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="countdown" type="Label" parent="hud/hud_container/respawn_hud"]
+[node name="respawn_hud" type="CenterContainer" parent="hud/respanw_screen"]
+margin_right = 160.0
+margin_bottom = 320.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="countdown" type="Label" parent="hud/respanw_screen/respawn_hud"]
 margin_left = 70.0
 margin_top = 146.0
 margin_right = 90.0
