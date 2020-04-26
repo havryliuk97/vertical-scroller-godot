@@ -1,5 +1,7 @@
 extends Node2D
 
+signal player_killed()
+
 onready var PlayerClass = preload("res://entities/player-ship.tscn")
 onready var player: AbstractEntity
 onready var camera := $camera
@@ -52,10 +54,12 @@ func _unhandled_input(event):
 func kill_player():
 	player.kill()
 	player = null
+	emit_signal("player_killed")
 
 
 func spawn_player():
 	player = PlayerClass.instance()
+	player.connect("collision_occured", self, "_on_player_collided")
 	player.global_position = Vector2(128.0, 300.0)
 	add_child(player)
 
