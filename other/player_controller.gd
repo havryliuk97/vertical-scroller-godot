@@ -1,6 +1,7 @@
 extends Node2D
 
 signal player_killed()
+signal player_spawned(player)
 
 onready var PlayerClass = preload("res://entities/player-ship.tscn")
 onready var player: AbstractEntity
@@ -8,8 +9,8 @@ onready var camera := $camera
 
 
 func _ready():
-	player = $player
-	player.connect("collision_occured", self, "_on_player_collided")
+	if not player:
+		spawn_player()
 
 
 func _process(delta):
@@ -26,10 +27,12 @@ func _process(delta):
 		if not(Input.is_action_pressed("up") or 
 				Input.is_action_pressed("down")):
 			player.linear_acc.y = 0.0
-			if abs(player.linear_vel.y) > 0.1:
+			if abs(player.linear_vel.y) > 10.01:
 				player.linear_vel.y *= 0.9
 			else:
 				player.linear_vel.y = 0.0
+		
+#		player.linear_vel.y = min(-160.0, player.linear_vel.y)
 		
 		player.global_position.x = clamp(player.global_position.x, 0.0, 256.0)
 		
@@ -62,6 +65,8 @@ func spawn_player():
 	player.connect("collision_occured", self, "_on_player_collided")
 	player.global_position = Vector2(128.0, 300.0)
 	add_child(player)
+	emit_signal("player_spawned", player)
+	print("player spawned emitted")
 
 
 func _on_player_collided(player, collider):

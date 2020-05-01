@@ -1,6 +1,5 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://entities/enemy-small.tscn" type="PackedScene" id=1]
 [ext_resource path="res://assets/backgrounds/desert-backgorund.png" type="Texture" id=2]
 [ext_resource path="res://other/player_controller.tscn" type="PackedScene" id=3]
 [ext_resource path="res://levels/level-1.gd" type="Script" id=4]
@@ -25,10 +24,14 @@ texture = ExtResource( 2 )
 centered = false
 region_enabled = true
 region_rect = Rect2( 0, 0, 256, 544 )
+__meta__ = {
+"_edit_lock_": true
+}
 
 [node name="hud" type="CanvasLayer" parent="."]
 
 [node name="respanw_screen" type="Control" parent="hud"]
+visible = false
 margin_right = 160.0
 margin_bottom = 320.0
 __meta__ = {
@@ -58,17 +61,10 @@ margin_bottom = 174.0
 custom_fonts/font = SubResource( 1 )
 text = "5"
 
+[node name="player_projectiles" type="Node2D" parent="."]
+
 [node name="enemies" type="Node2D" parent="."]
 z_index = 2
-
-[node name="body" parent="enemies" instance=ExtResource( 1 )]
-position = Vector2( 91, 70 )
-
-[node name="body2" parent="enemies" instance=ExtResource( 1 )]
-position = Vector2( 104, 127 )
-
-[node name="body3" parent="enemies" instance=ExtResource( 1 )]
-position = Vector2( 146, 103 )
 
 [node name="player_controller" parent="." instance=ExtResource( 3 )]
 
