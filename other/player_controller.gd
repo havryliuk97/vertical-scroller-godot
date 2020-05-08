@@ -42,16 +42,16 @@ func _process(delta):
 func _unhandled_input(event):
 	if player:
 		if event.is_action_pressed("left"):
-			player.linear_acc.x = -10.0
+			player.linear_acc.x = -500.0
 		
 		if event.is_action_pressed("right"):
-			player.linear_acc.x = 10.0
+			player.linear_acc.x = 500.0
 		
 		if event.is_action_pressed("up"):
-			player.linear_acc.y = -5.0
+			player.linear_acc.y = -250.0
 		
 		if event.is_action_pressed("down"):
-			player.linear_acc.y = 5.0
+			player.linear_acc.y = 250.0
 
 
 func kill_player():
@@ -72,4 +72,5 @@ func spawn_player():
 func _on_player_collided(player, collider):
 	var layer = collider.get_collision_layer()
 	if layer == 4 or layer == 8:
+		collider.kill()
 		kill_player()

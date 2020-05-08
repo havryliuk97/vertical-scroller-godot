@@ -17,7 +17,7 @@ func _physics_process(delta):
 	if max_linear_acc > 0.0:
 		linear_acc = linear_acc.clamped(max_linear_acc)
 	
-	linear_vel += linear_acc
+	linear_vel += linear_acc*delta
 	
 	if max_linear_vel > 0.0:
 		linear_vel = linear_vel.clamped(max_linear_vel)

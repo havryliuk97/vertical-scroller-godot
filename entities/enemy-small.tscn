@@ -27,6 +27,18 @@ tracks/0/keys = {
 "method": "_spawn_explosion"
 } ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath(".:linear_acc")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 0,
+"values": [ Vector2( 0, 0 ) ]
+}
 
 [node name="body" instance=ExtResource( 1 )]
 collision_layer = 4
@@ -47,5 +59,7 @@ autostart = true
 
 [node name="anim_player" type="AnimationPlayer" parent="." index="3"]
 anims/death = SubResource( 2 )
+
+[node name="tween" type="Tween" parent="." index="4"]
 [connection signal="timeout" from="anim_timer" to="." method="_on_anim_timer_timeout"]
 [connection signal="animation_finished" from="anim_player" to="." method="_on_animation_finished"]

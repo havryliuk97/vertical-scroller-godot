@@ -17,6 +17,8 @@ func kill():
 	$sprite.hide()
 	$anim_timer.stop()
 	$anim_player.play("death")
+	$tween.interpolate_property(self, "linear_vel", linear_vel, Vector2.ZERO, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	$tween.start()
 
 func _on_anim_timer_timeout():
 	if sprite.frame == 0:
@@ -31,5 +33,4 @@ func _spawn_explosion(radius:float = 1.0):
 
 func _on_animation_finished(anim_name):
 	if anim_name == "death":
-		print("died")
 		queue_free()

@@ -34,6 +34,9 @@ func kill():
 	$sprite.hide()
 	$anim_timer.stop()
 	$anim_player.play("death")
+	linear_acc = Vector2.ZERO
+	$tween.interpolate_property(self, "linear_vel", linear_vel, Vector2.ZERO, 0.5, Tween.TRANS_LINEAR, Tween.EASE_IN)
+	$tween.start()
 
 
 func _spawn_explosion(radius:float = 1.0):

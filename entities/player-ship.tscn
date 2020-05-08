@@ -5,7 +5,7 @@
 [ext_resource path="res://assets/spritesheets/ship.png" type="Texture" id=3]
 [ext_resource path="res://assets/audio/laser1.wav" type="AudioStream" id=4]
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=1]
 radius = 7.07107
 
 [sub_resource type="Animation" id=2]
@@ -33,12 +33,10 @@ tracks/0/keys = {
 collision_mask = 12
 script = ExtResource( 2 )
 max_linear_vel = 200.0
-max_linear_acc = 20.0
-spread = 2.0
 
 [node name="hitbox" parent="." index="0"]
 position = Vector2( 0, -4 )
-shape = SubResource( 3 )
+shape = SubResource( 1 )
 
 [node name="sprite" parent="." index="1"]
 texture = ExtResource( 3 )
@@ -63,6 +61,8 @@ position = Vector2( 0, -16 )
 [node name="shoot_sound" type="AudioStreamPlayer" parent="." index="6"]
 stream = ExtResource( 4 )
 volume_db = -30.0
+
+[node name="tween" type="Tween" parent="." index="7"]
 [connection signal="timeout" from="anim_timer" to="." method="_on_anim_timer_timeout"]
 [connection signal="animation_finished" from="anim_player" to="." method="_on_animation_finished"]
 [connection signal="timeout" from="fire_timer" to="." method="_on_fire_timer_timeout"]
