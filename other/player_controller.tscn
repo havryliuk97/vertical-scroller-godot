@@ -6,13 +6,12 @@
 script = ExtResource( 2 )
 
 [node name="camera" type="Camera2D" parent="."]
-position = Vector2( 133, 200 )
+position = Vector2( 135, 305 )
 current = true
 limit_left = 0
 limit_right = 256
 limit_bottom = 320
 drag_margin_h_enabled = true
-drag_margin_v_enabled = true
 offset_v = -1.0
 drag_margin_left = 0.3
 drag_margin_top = 0.8
