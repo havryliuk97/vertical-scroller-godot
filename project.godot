@@ -30,6 +30,10 @@ config/name="Vertical Scroller"
 run/main_scene="res://levels/title-screen.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+ScenesManager="*res://autoload/scenes-manager.gd"
+
 [display]
 
 window/size/width=160

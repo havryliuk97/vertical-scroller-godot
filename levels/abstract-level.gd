@@ -7,14 +7,19 @@ onready var respawn_counter := $hud/respanw_screen/respawn_hud/countdown
 onready var player_controller := $player_controller
 
 
+var offset
+
 func _ready():
+	ScenesManager.set_current_level(self)
 	player_controller.connect("player_killed", self, "_on_player_killed")
 	player_controller.connect("player_spawned", self, "_on_player_spawned")
 	_on_player_spawned(player_controller.player)
 	respawn_screen.hide()
+	offset = $spawner.position - player_controller.position
 
 
 func _process(delta):
+	$spawner.position = player_controller.position + offset
 	if not player_controller.player:
 		respawn_counter.text = str(str(round(respawn_timer.time_left)))
 

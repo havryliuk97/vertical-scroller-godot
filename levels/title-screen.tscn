@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://levels/title-screen.gd" type="Script" id=1]
 [ext_resource path="res://other/background.tscn" type="PackedScene" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://assets/fonts/pixelart.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/hud/Button-Orange-Big-down.png" type="Texture" id=6]
 [ext_resource path="res://assets/hud/Button-Orange-Big-up.png" type="Texture" id=7]
+[ext_resource path="res://assets/hud/Window-Frame.png" type="Texture" id=8]
 
 [sub_resource type="DynamicFont" id=1]
 font_data = ExtResource( 5 )
@@ -58,16 +59,28 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="buttons" type="VBoxContainer" parent="center_container"]
-margin_left = 62.0
-margin_top = 123.0
-margin_right = 98.0
-margin_bottom = 141.0
+[node name="window" type="TextureRect" parent="center_container"]
+margin_left = 15.0
+margin_top = 81.0
+margin_right = 145.0
+margin_bottom = 183.0
+texture = ExtResource( 8 )
+
+[node name="buttons" type="VBoxContainer" parent="center_container/window"]
+anchor_left = 0.362
+anchor_right = 0.638
+anchor_bottom = 1.0
+margin_left = -0.0600014
+margin_right = 0.0599976
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="play_button" type="TextureButton" parent="center_container/buttons"]
+[node name="play_button" type="TextureButton" parent="center_container/window/buttons"]
+margin_top = 42.0
+margin_right = 36.0
+margin_bottom = 60.0
 rect_pivot_offset = Vector2( 0, 18 )
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
@@ -82,3 +95,4 @@ __meta__ = {
 "_edit_lock_": true,
 "_edit_use_anchors_": false
 }
+[connection signal="pressed" from="center_container/window/buttons/play_button" to="." method="_on_play_button_pressed"]

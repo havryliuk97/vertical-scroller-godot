@@ -5,7 +5,7 @@ signal player_fired(projectile, location, vel)
 var sprite_frame_x := 2
 var sprite_frame_y := 0
 var dead := false
-export var muzzle_speed := 300.0
+export var muzzle_speed := 400.0
 export var spread := 2.0
 
 onready var DeathEffect := preload("res://effects/explosion.tscn")
