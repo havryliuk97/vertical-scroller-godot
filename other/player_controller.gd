@@ -7,7 +7,7 @@ export(float) var basic_speed := 50.0
 export(PackedScene) var PlayerClass = preload("res://entities/player-ship.tscn")
 
 var p_width:float = 16.0
-var p_height:float = 24.0
+var p_height:float = 40.0
 
 onready var player: AbstractEntity
 onready var camera := $camera

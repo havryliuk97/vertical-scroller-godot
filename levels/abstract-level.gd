@@ -1,3 +1,4 @@
+class_name AbstractLevel
 extends Node2D
 
 onready var respawn_timer := $respawn_timer

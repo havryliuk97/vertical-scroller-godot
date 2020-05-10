@@ -1,3 +1,69 @@
-[gd_scene format=2]
+[gd_scene load_steps=5 format=2]
 
-[node name="title_screen" type="Node2D"]
+[ext_resource path="res://levels/title-screen.gd" type="Script" id=1]
+[ext_resource path="res://other/background.tscn" type="PackedScene" id=2]
+[ext_resource path="res://assets/hud/TopBar.png" type="Texture" id=3]
+[ext_resource path="res://assets/hud/Bottom-Frame.png" type="Texture" id=4]
+
+[node name="title_screen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 9.0 ],
+"_edit_use_anchors_": false
+}
+scroll_speed = 50.0
+
+[node name="parallax" parent="." instance=ExtResource( 2 )]
+offset = Vector2( -50, 0 )
+transform = Transform2D( 1, 0, 0, 1, -50, 0 )
+scroll_offset = Vector2( 0, 1746.09 )
+
+[node name="top_bar" type="TextureRect" parent="."]
+anchor_right = 1.0
+anchor_bottom = 0.062
+margin_bottom = 0.16
+texture = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="Label" parent="top_bar"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+text = "Title"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="center_container" type="CenterContainer" parent="."]
+anchor_top = 0.062
+anchor_right = 1.0
+anchor_bottom = 0.891
+margin_top = 0.16
+margin_bottom = -0.119995
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="buttons" type="VBoxContainer" parent="center_container"]
+margin_left = 80.0
+margin_top = 132.0
+margin_right = 80.0
+margin_bottom = 132.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="bottom_right" type="TextureRect" parent="."]
+anchor_top = 0.891
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -0.119995
+texture = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
