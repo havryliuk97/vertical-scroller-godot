@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 export var scroll_speed := 70.0
 
