@@ -27,6 +27,8 @@ var draw_lenght := 30.0
 
 var spawn_index := 0
 
+var index_mult = 1
+
 onready var delay_timer := $delay_timer
 
 func _ready():
@@ -39,8 +41,6 @@ func spawn():
 	
 	if Engine.editor_hint:
 		return
-	
-	var index_mult = 1
 	
 	if spawn_count == 0:
 		delay_timer.stop()
@@ -56,7 +56,8 @@ func spawn():
 					spawn_index = 0
 			SpawnSequence.ALTERNATE:
 				if spawn_index == spawn_points or spawn_index == -1:
-					index_mult = -1
+					spawn_index = clamp(spawn_index, 1, spawn_points-1)
+					index_mult *= -1
 		
 		var object = SpawnObj.instance()
 		object.position = position + spawn_offset*spawn_index
