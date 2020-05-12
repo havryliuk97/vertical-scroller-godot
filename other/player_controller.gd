@@ -7,7 +7,7 @@ export(float) var basic_speed := 0.0
 export(PackedScene) var PlayerClass = preload("res://entities/player-ship.tscn")
 
 var p_width:float = 16.0
-var p_height:float = 40.0
+var p_height:float = 24.0
 
 onready var player: AbstractEntity
 onready var camera := $camera
@@ -40,7 +40,7 @@ func _process(delta):
 		
 		
 		player.position.x = clamp(player.position.x, p_width/2, 256.0-p_width/2)
-		player.position.y = clamp(player.position.y, p_height, 360.0-p_height)
+		player.position.y = clamp(player.position.y, p_height, 320.0-p_height)
 		
 		camera.position.x = player.position.x
 	

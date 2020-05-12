@@ -2,6 +2,8 @@ extends AbstractEntity
 
 signal player_fired(projectile, location, vel)
 
+export var shoot := false
+
 var sprite_frame_x := 2
 var sprite_frame_y := 0
 var dead := false
@@ -57,7 +59,10 @@ func _on_animation_finished(anim_name):
 
 
 func _on_fire_timer_timeout():
-	var vel = Vector2(0.0, -muzzle_speed).rotated(deg2rad(rand_range(-spread/2.0, spread/2.0)))
-	emit_signal("player_fired", Projectile, $muzzle_pos.global_position, vel)
-	$shoot_sound.pitch_scale = rand_range(0.7, 1.3)
-	$shoot_sound.play()
+	if shoot:
+		var vel = Vector2(0.0, -muzzle_speed).rotated(deg2rad(rand_range(-spread/2.0, spread/2.0)))
+		emit_signal("player_fired", Projectile, $muzzle_pos.global_position, vel)
+		$shoot_sound.pitch_scale = rand_range(0.7, 1.3)
+		$shoot_sound.play()
+	else:
+		$fire_timer.stop()

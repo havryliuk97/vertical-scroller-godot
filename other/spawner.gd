@@ -46,28 +46,31 @@ func spawn():
 		delay_timer.stop()
 		return
 	
-	if path:
-		pass
-	else:
+	match spawn_sequence:
+		SpawnSequence.FORWARD:
+			if spawn_index > spawn_points-1:
+				spawn_index = 0
+		SpawnSequence.ALTERNATE:
+			if spawn_index == spawn_points or spawn_index == -1:
+				spawn_index = clamp(spawn_index, 1, spawn_points-2)
+				index_mult *= -1
 		
-		match spawn_sequence:
-			SpawnSequence.FORWARD:
-				if spawn_index > spawn_points-1:
-					spawn_index = 0
-			SpawnSequence.ALTERNATE:
-				if spawn_index == spawn_points or spawn_index == -1:
-					spawn_index = clamp(spawn_index, 1, spawn_points-1)
-					index_mult *= -1
+	var object = SpawnObj.instance()
+	object.position = position + spawn_offset*spawn_index
+	if object is AbstractEntity:
+		if path:
+			var path_node:Path2D = get_node(path)
+			var path_points = path_node.curve.get_baked_points()
+			var points = []
+			for i in range(path_points.size()):
+				points.append(global_position + path_points[i])
+			object.path = points
+		object.linear_vel = Vector2(vel_mag, 0.0).rotated(deg2rad(vel_angle))
+		object.linear_acc = Vector2(acc_mag, 0.0).rotated(deg2rad(acc_angle))
+	get_tree().root.add_child(object)
 		
-		var object = SpawnObj.instance()
-		object.position = position + spawn_offset*spawn_index
-		if object is AbstractEntity:
-			object.linear_vel = Vector2(vel_mag, 0.0).rotated(deg2rad(vel_angle))
-			object.linear_acc = Vector2(acc_mag, 0.0).rotated(deg2rad(acc_angle))
-		get_tree().root.add_child(object)
-		
-		spawn_index += index_mult
-		spawn_count -= 1
+	spawn_index += index_mult
+	spawn_count -= 1
 
 
 func _trigger_spawn():
@@ -113,13 +116,16 @@ func _draw():
 		
 		for i in range(spawn_points):
 			draw_circle(spawn_offset*i, 5.0, Color(0.8, 0.5, 0.5))
-		
-			var time_step := 0.2
-			var points := PoolVector2Array()
-			var time := 0.0
-			for j in range(draw_lenght):
-				time = j * time_step
-				var point = spawn_offset*i + Vector2(vel_mag, 0.0).rotated(deg2rad(vel_angle))*time + Vector2(acc_mag, 0.0).rotated(deg2rad(acc_angle))*time*time/2
-				points.append(point)
 			
-			draw_multiline(points, Color(0.4,0.6, 0.8), 2.0)
+			if not path:
+				var time_step := 0.2
+				var points := PoolVector2Array()
+				var time := 0.0
+				for j in range(draw_lenght):
+					time = j * time_step
+					var point = spawn_offset*i + Vector2(vel_mag, 0.0).rotated(deg2rad(vel_angle))*time + Vector2(acc_mag, 0.0).rotated(deg2rad(acc_angle))*time*time/2
+					points.append(point)
+				
+				draw_multiline(points, Color(0.4,0.6, 0.8), 2.0)
+	elif path:
+		draw_polyline(get_node(path).curve.get_baked_points(), Color(0.4,0.6, 0.8), 2.0)

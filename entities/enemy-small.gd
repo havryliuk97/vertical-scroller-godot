@@ -26,3 +26,5 @@ func _spawn_explosion(radius:float = 1.0):
 func _on_animation_finished(anim_name):
 	if anim_name == "death":
 		queue_free()
+
+
