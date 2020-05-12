@@ -20,12 +20,9 @@ __meta__ = {
 "_edit_horizontal_guides_": [ 9.0 ],
 "_edit_use_anchors_": false
 }
-scroll_speed = 50.0
 
-[node name="parallax" parent="." instance=ExtResource( 2 )]
-offset = Vector2( -50, 0 )
-transform = Transform2D( 1, 0, 0, 1, -50, 0 )
-scroll_offset = Vector2( 0, 1746.09 )
+[node name="bg" parent="." instance=ExtResource( 2 )]
+position = Vector2( -50, 0 )
 
 [node name="top_bar" type="TextureRect" parent="."]
 anchor_right = 1.0

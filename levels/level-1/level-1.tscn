@@ -7,11 +7,14 @@
 [node name="level" instance=ExtResource( 1 )]
 
 [node name="spawner" parent="." index="6" instance=ExtResource( 2 )]
-position = Vector2( 121, 0 )
+position = Vector2( 131.09, 1 )
 SpawnObj = ExtResource( 3 )
-spawn_points = 3
+spawn_points = 2
 spawn_offset = Vector2( 15, 0 )
-spawn_sequence = 1
-vel_mag = 30.0
+vel_mag = 100.0
+vel_angle = 90.0
+acc_mag = 20.0
+acc_angle = 267.0
 autostart = true
-spawn_count = 100
+spawn_count = 8
+spawn_delay = 0.4

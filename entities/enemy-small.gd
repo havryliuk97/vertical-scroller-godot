@@ -2,14 +2,6 @@ extends AbstractEntity
 
 onready var DeathEffect := preload("res://effects/explosion.tscn")
 
-func _update(delta):
-	if collision_info:
-		var collider = collision_info.collider
-		var layer = collider.get_collision_layer()
-		if layer == 2:
-			collider.queue_free()
-			kill()
-#			emit_signal("collision_occured", self, collision_info.collider)
 
 func kill():
 	$hitbox.hide()

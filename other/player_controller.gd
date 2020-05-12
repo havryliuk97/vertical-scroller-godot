@@ -3,7 +3,7 @@ extends Node2D
 signal player_killed()
 signal player_spawned(player)
 
-export(float) var basic_speed := 50.0
+export(float) var basic_speed := 0.0
 export(PackedScene) var PlayerClass = preload("res://entities/player-ship.tscn")
 
 var p_width:float = 16.0
