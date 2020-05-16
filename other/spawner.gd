@@ -1,7 +1,7 @@
 tool
 extends Node2D
 
-export(NodePath) var path
+export(NodePath) var path_link
 
 export(PackedScene) var SpawnObj:PackedScene
 
@@ -21,6 +21,8 @@ export(bool) var autostart := false
 
 export(int, 1, 100) var spawn_count := 1
 
+export(float) var start_delay := 0.0
+
 export(float) var spawn_delay := 0.1
 
 var draw_lenght := 30.0
@@ -29,18 +31,32 @@ var spawn_index := 0
 
 var index_mult = 1
 
+var level: AbstractLevel
+
+var obj_path := []
+
+onready var start_timer := $start_timer
 onready var delay_timer := $delay_timer
 
 func _ready():
+	start_timer.wait_time = start_delay
 	delay_timer.wait_time = spawn_delay
 	
+	if path_link:
+		obj_path = calc_obj_path(get_node(path_link).curve.get_baked_points(), get_node(path_link).position)
+	
 	if autostart and not Engine.editor_hint:
-		_trigger_spawn()
+		if start_delay == 0.0:
+			trigger_spawn()
+		else:
+			start_timer.start()
 
 func spawn():
 	
 	if Engine.editor_hint:
 		return
+	
+	level = ScenesManager.current_level
 	
 	if spawn_count == 0:
 		delay_timer.stop()
@@ -58,23 +74,27 @@ func spawn():
 	var object = SpawnObj.instance()
 	object.position = position + spawn_offset*spawn_index
 	if object is AbstractEntity:
-		if path:
-			var path_node:Path2D = get_node(path)
-			var path_points = path_node.curve.get_baked_points()
-			var points = []
-			for i in range(path_points.size()):
-				points.append(global_position + path_points[i])
-			object.path = points
+		if obj_path:
+			object.path = obj_path
 		object.linear_vel = Vector2(vel_mag, 0.0).rotated(deg2rad(vel_angle))
 		object.linear_acc = Vector2(acc_mag, 0.0).rotated(deg2rad(acc_angle))
-	get_tree().root.add_child(object)
-		
+	
+	level.enemies.add_child(object)
+
 	spawn_index += index_mult
 	spawn_count -= 1
 
 
-func _trigger_spawn():
+func trigger_spawn():
 	delay_timer.start()
+
+
+func calc_obj_path(path_points:PoolVector2Array, offset:Vector2 = Vector2.ZERO):
+	var path := []
+	for i in range(path_points.size()):
+		path.append(global_position + offset + path_points[i])
+	
+	return path
 
 
 func _on_delay_timer_timeout():
@@ -117,7 +137,7 @@ func _draw():
 		for i in range(spawn_points):
 			draw_circle(spawn_offset*i, 5.0, Color(0.8, 0.5, 0.5))
 			
-			if not path:
+			if not path_link:
 				var time_step := 0.2
 				var points := PoolVector2Array()
 				var time := 0.0
@@ -127,5 +147,10 @@ func _draw():
 					points.append(point)
 				
 				draw_multiline(points, Color(0.4,0.6, 0.8), 2.0)
-	elif path:
-		draw_polyline(get_node(path).curve.get_baked_points(), Color(0.4,0.6, 0.8), 2.0)
+		
+	if path_link and obj_path:
+		draw_polyline(obj_path, Color(0.4,0.6, 0.8), 2.0)
+
+
+func _on_start_timer_timeout():
+	trigger_spawn()

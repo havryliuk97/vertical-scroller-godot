@@ -1,6 +1,8 @@
 class_name AbstractLevel
 extends Node2D
 
+
+onready var enemies := $enemies
 onready var respawn_timer := $respawn_timer
 onready var respawn_screen := $hud/respanw_screen
 onready var respawn_counter := $hud/respanw_screen/respawn_hud/countdown

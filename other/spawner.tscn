@@ -7,4 +7,8 @@ script = ExtResource( 1 )
 
 [node name="delay_timer" type="Timer" parent="."]
 wait_time = 0.1
+
+[node name="start_timer" type="Timer" parent="."]
+one_shot = true
 [connection signal="timeout" from="delay_timer" to="." method="_on_delay_timer_timeout"]
+[connection signal="timeout" from="start_timer" to="." method="_on_start_timer_timeout"]
