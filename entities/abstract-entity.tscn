@@ -4,6 +4,7 @@
 
 [node name="body" type="KinematicBody2D"]
 script = ExtResource( 1 )
+debug = false
 
 [node name="hitbox" type="CollisionShape2D" parent="."]
 

@@ -50,16 +50,16 @@ func _process(delta):
 func _unhandled_input(event):
 	if player:
 		if event.is_action_pressed("left"):
-			player.linear_acc.x = -400.0
+			player.linear_acc.x = -3
 		
 		if event.is_action_pressed("right"):
-			player.linear_acc.x = 400.0
+			player.linear_acc.x = 3
 		
 		if event.is_action_pressed("up"):
-			player.linear_acc.y = -250.0
+			player.linear_acc.y = -3
 		
 		if event.is_action_pressed("down"):
-			player.linear_acc.y = 250.0
+			player.linear_acc.y = 3
 
 
 func kill_player():

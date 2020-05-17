@@ -18,10 +18,22 @@ _global_script_classes=[ {
 "class": "AbstractLevel",
 "language": "GDScript",
 "path": "res://levels/abstract-level.gd"
+}, {
+"base": "Resource",
+"class": "PeriodicMotion",
+"language": "GDScript",
+"path": "res://resources/periodic_motion.gd"
+}, {
+"base": "Resource",
+"class": "SimpleMotion",
+"language": "GDScript",
+"path": "res://resources/simple_motion.gd"
 } ]
 _global_script_class_icons={
 "AbstractEntity": "",
-"AbstractLevel": ""
+"AbstractLevel": "",
+"PeriodicMotion": "",
+"SimpleMotion": ""
 }
 
 [application]

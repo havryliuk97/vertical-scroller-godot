@@ -10,5 +10,9 @@ wait_time = 0.1
 
 [node name="start_timer" type="Timer" parent="."]
 one_shot = true
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
 [connection signal="timeout" from="delay_timer" to="." method="_on_delay_timer_timeout"]
 [connection signal="timeout" from="start_timer" to="." method="_on_start_timer_timeout"]
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
