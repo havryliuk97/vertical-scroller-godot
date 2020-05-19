@@ -21,6 +21,6 @@ motion_type = SubResource( 1 )
 spawn_points = 5
 spawn_offset = Vector2( 30, 0 )
 spawn_sequence = 2
-autostart = true
 spawn_count = 20
+units_per_spawn = 2
 spawn_delay = 0.2
