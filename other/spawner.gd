@@ -1,16 +1,20 @@
 tool
 extends Node2D
 
-export(PackedScene) var SpawnObj:PackedScene
+enum MotionType {SIMPLE, PERIODIC, SQUARE}
+enum SpawnSequence {FORWARD, ALTERNATE, RANDOM}
 
-export(Resource) var motion_type
+export(MotionType) var motion_type setget set_motion
+
+export(Resource) var motion
+
+export(PackedScene) var SpawnObj:PackedScene
 
 export(int, 1, 99) var spawn_points := 1
 export(Vector2) var spawn_offset := Vector2.ZERO 
 
-enum SpawnSequence {FORWARD, ALTERNATE, RANDOM}
-export(SpawnSequence) var spawn_sequence := SpawnSequence.FORWARD
 
+export(SpawnSequence) var spawn_sequence := SpawnSequence.FORWARD
 
 export(bool) var autostart := true
 
@@ -28,17 +32,27 @@ var index_mult = 1
 
 var level: AbstractLevel
 
-var path_node : Path2D
-var obj_path := []
+var simple_motion: SimpleMotion
+var periodic_motion: PeriodicMotion
+var square_motion: SquareMotion
 
 onready var start_timer := $start_timer
 onready var delay_timer := $delay_timer
 
 func _ready():
 	randomize()
-	start_timer.wait_time = start_delay
+	
+	simple_motion = SimpleMotion.new()
+	periodic_motion = PeriodicMotion.new()
+	square_motion = SquareMotion.new()
+	
+	if start_delay != 0.0:
+		start_timer.wait_time = start_delay
+		
 	delay_timer.wait_time = spawn_delay
-	$Timer.start()
+	
+	if not motion:
+		set_motion(MotionType.SIMPLE)
 	
 	if autostart and not Engine.editor_hint:
 		if start_delay == 0.0:
@@ -47,8 +61,8 @@ func _ready():
 			start_timer.start()
 
 
-#func _process(delta):
-#	update()
+func _process(delta):
+	update()
 
 
 func spawn():
@@ -83,32 +97,18 @@ func spawn():
 			spawn_index = 0
 		
 		var object = SpawnObj.instance()
-		object.position = position + spawn_offset*spawn_index
+		object.position = position + spawn_offset.rotated(rotation)*spawn_index
 		if object is AbstractEntity:
-			if motion_type as SimpleMotion:
-				object.linear_vel = Vector2(motion_type.vel_mag, 0.0).rotated(deg2rad(motion_type.vel_angle))
-				object.linear_acc= Vector2(motion_type.acc_mag, 0.0).rotated(deg2rad(motion_type.acc_angle))
-			elif motion_type as PeriodicMotion:
-				object.path = calc_path(global_position + spawn_offset*spawn_index)
+			if motion as SimpleMotion:
+				object.linear_vel = Vector2(motion.vel_mag, 0.0).rotated(deg2rad(motion.vel_angle))
+				object.linear_acc= Vector2(motion.acc_mag, 0.0).rotated(deg2rad(motion.acc_angle))
+			else:
+				object.path = motion.calc_path(global_position + spawn_offset.rotated(rotation)*spawn_index, rotation)
 		
 		level.enemies.add_child(object)
 		
 		spawn_index += index_mult
 		spawn_count -= 1
-
-
-func calc_path(start_pos:Vector2 = Vector2.ZERO):
-	var points := []
-	for i in range(0, motion_type.lenght, motion_type.step):
-		var offset := Vector2.ZERO
-		match motion_type.function:
-			"Sine":
-				offset.x = motion_type.amplitude*sin(i*motion_type.frequency)
-			"Cosine":
-				offset.x = motion_type.amplitude*cos(i*motion_type.frequency)
-		offset.y = i
-		points.append(start_pos + offset)
-	return points
 
 
 func trigger_spawn():
@@ -123,11 +123,13 @@ func _draw():
 		for i in range(spawn_points):
 			draw_circle(spawn_offset*i, 5.0, Color(0.8, 0.5, 0.5))
 			
-			if motion_type as SimpleMotion:
-				draw_line(spawn_offset*i, spawn_offset*i + Vector2(motion_type.vel_mag, 0.0).rotated(deg2rad(motion_type.vel_angle)), Color(0.4,0.6, 0.8), 2.0)
-			elif motion_type as PeriodicMotion:
-				points = calc_path(spawn_offset*i)
-				draw_multiline(points, Color(0.4,0.6, 0.8), 4.0)
+			if motion as SimpleMotion:
+				draw_line(spawn_offset*i, spawn_offset*i + Vector2(motion.vel_mag, 0.0).rotated(deg2rad(motion.vel_angle)), Color(0.4,0.6, 0.8), 2.0)
+			else:
+				points = motion.calc_path(spawn_offset*i)
+				draw_polyline(points, Color(0.4,0.6, 0.8), 2.0)
+				for point in points:
+					draw_circle(point, 2.0, Color(0.8,0.6, 0.2))
 
 
 func set_units_per_spawn(value):
@@ -144,3 +146,15 @@ func _on_start_timer_timeout():
 
 func _on_Timer_timeout():
 	update()
+
+
+func set_motion(value):
+	motion_type = value
+	match motion_type:
+		MotionType.SIMPLE:
+			motion = simple_motion
+		MotionType.PERIODIC:
+			motion = periodic_motion
+		MotionType.SQUARE:
+			motion = square_motion
+	property_list_changed_notify()

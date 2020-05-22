@@ -28,12 +28,18 @@ _global_script_classes=[ {
 "class": "SimpleMotion",
 "language": "GDScript",
 "path": "res://resources/simple_motion.gd"
+}, {
+"base": "Resource",
+"class": "SquareMotion",
+"language": "GDScript",
+"path": "res://resources/square_motion.gd"
 } ]
 _global_script_class_icons={
 "AbstractEntity": "",
 "AbstractLevel": "",
 "PeriodicMotion": "",
-"SimpleMotion": ""
+"SimpleMotion": "",
+"SquareMotion": ""
 }
 
 [application]
