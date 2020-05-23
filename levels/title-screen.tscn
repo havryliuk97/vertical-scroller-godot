@@ -1,16 +1,10 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://levels/title-screen.gd" type="Script" id=1]
 [ext_resource path="res://other/background.tscn" type="PackedScene" id=2]
-[ext_resource path="res://assets/hud/TopBar.png" type="Texture" id=3]
-[ext_resource path="res://assets/hud/Bottom-Frame.png" type="Texture" id=4]
-[ext_resource path="res://assets/fonts/pixelart.ttf" type="DynamicFontData" id=5]
 [ext_resource path="res://assets/hud/Button-Orange-Big-down.png" type="Texture" id=6]
 [ext_resource path="res://assets/hud/Button-Orange-Big-up.png" type="Texture" id=7]
 [ext_resource path="res://assets/hud/Window-Frame.png" type="Texture" id=8]
-
-[sub_resource type="DynamicFont" id=1]
-font_data = ExtResource( 5 )
 
 [node name="title_screen" type="Control"]
 anchor_right = 1.0
@@ -23,27 +17,6 @@ __meta__ = {
 
 [node name="bg" parent="." instance=ExtResource( 2 )]
 position = Vector2( -50, 0 )
-
-[node name="top_bar" type="TextureRect" parent="."]
-anchor_right = 1.0
-anchor_bottom = 0.062
-margin_bottom = 0.16
-texture = ExtResource( 3 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
-
-[node name="title" type="Label" parent="top_bar"]
-anchor_right = 1.0
-margin_bottom = 11.0
-custom_fonts/font = SubResource( 1 )
-text = "Title"
-align = 1
-valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="center_container" type="CenterContainer" parent="."]
 anchor_top = 0.062
@@ -81,15 +54,4 @@ margin_bottom = 60.0
 rect_pivot_offset = Vector2( 0, 18 )
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
-
-[node name="bottom_right" type="TextureRect" parent="."]
-anchor_top = 0.891
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = -0.119995
-texture = ExtResource( 4 )
-__meta__ = {
-"_edit_lock_": true,
-"_edit_use_anchors_": false
-}
 [connection signal="pressed" from="center_container/window/buttons/play_button" to="." method="_on_play_button_pressed"]

@@ -1,5 +1,10 @@
 tool
+
+class_name Spawner
 extends Node2D
+
+signal finished_spawn()
+signal units_destroyed()
 
 enum MotionType {SIMPLE, PERIODIC, SQUARE}
 enum SpawnSequence {FORWARD, ALTERNATE, RANDOM}
@@ -13,10 +18,9 @@ export(PackedScene) var SpawnObj:PackedScene
 export(int, 1, 99) var spawn_points := 1
 export(Vector2) var spawn_offset := Vector2.ZERO 
 
-
 export(SpawnSequence) var spawn_sequence := SpawnSequence.FORWARD
 
-export(bool) var autostart := true
+export(bool) var autostart := false
 
 export(int, 1, 100) var spawn_count := 1
 
@@ -30,8 +34,13 @@ var spawn_index := 0
 
 var index_mult = 1
 
-var level: AbstractLevel
+var level
 
+var units
+
+# TODO: change saving instances to saving params of 
+# previous instance when chaned to new type, and creating
+# new instance with those params when changed back to previous type 
 var simple_motion: SimpleMotion
 var periodic_motion: PeriodicMotion
 var square_motion: SquareMotion
@@ -42,14 +51,16 @@ onready var delay_timer := $delay_timer
 func _ready():
 	randomize()
 	
-	simple_motion = SimpleMotion.new()
-	periodic_motion = PeriodicMotion.new()
-	square_motion = SquareMotion.new()
+#	simple_motion = SimpleMotion.new()
+#	periodic_motion = PeriodicMotion.new()
+#	square_motion = SquareMotion.new()
 	
 	if start_delay != 0.0:
 		start_timer.wait_time = start_delay
 		
 	delay_timer.wait_time = spawn_delay
+	
+	units=spawn_count
 	
 	if not motion:
 		set_motion(MotionType.SIMPLE)
@@ -79,6 +90,7 @@ func spawn():
 	for i in range(units_per_spawn):
 		if spawn_count == 0:
 			delay_timer.stop()
+			emit_signal("finished_spawn")
 			return
 	
 		if spawn_points > 1:
@@ -99,12 +111,13 @@ func spawn():
 		var object = SpawnObj.instance()
 		object.position = position + spawn_offset.rotated(rotation)*spawn_index
 		if object is AbstractEntity:
-			if motion as SimpleMotion:
+			if motion:
 				object.linear_vel = Vector2(motion.vel_mag, 0.0).rotated(deg2rad(motion.vel_angle))
 				object.linear_acc= Vector2(motion.acc_mag, 0.0).rotated(deg2rad(motion.acc_angle))
-			else:
-				object.path = motion.calc_path(global_position + spawn_offset.rotated(rotation)*spawn_index, rotation)
+				if motion as PathMotion:
+					object.path = motion.calc_path(global_position + spawn_offset.rotated(rotation)*spawn_index, rotation)
 		
+		object.connect("tree_exited", self, "_on_unit_died")
 		level.enemies.add_child(object)
 		
 		spawn_index += index_mult
@@ -123,13 +136,13 @@ func _draw():
 		for i in range(spawn_points):
 			draw_circle(spawn_offset*i, 5.0, Color(0.8, 0.5, 0.5))
 			
-			if motion as SimpleMotion:
+			if motion:
 				draw_line(spawn_offset*i, spawn_offset*i + Vector2(motion.vel_mag, 0.0).rotated(deg2rad(motion.vel_angle)), Color(0.4,0.6, 0.8), 2.0)
-			else:
-				points = motion.calc_path(spawn_offset*i)
-				draw_polyline(points, Color(0.4,0.6, 0.8), 2.0)
-				for point in points:
-					draw_circle(point, 2.0, Color(0.8,0.6, 0.2))
+				if motion as PathMotion:
+					points = motion.calc_path(spawn_offset*i)
+					draw_polyline(points, Color(0.4,0.6, 0.8), 2.0)
+					for point in points:
+						draw_circle(point, 2.0, Color(0.8,0.6, 0.2))
 
 
 func set_units_per_spawn(value):
@@ -144,17 +157,26 @@ func _on_start_timer_timeout():
 	trigger_spawn()
 
 
-func _on_Timer_timeout():
-	update()
+func _on_unit_died():
+	units -= 1
+	if units == 0:
+		emit_signal("units_destroyed")
 
 
 func set_motion(value):
 	motion_type = value
+#	match motion_type:
+#		MotionType.SIMPLE:
+#			motion = simple_motion
+#		MotionType.PERIODIC:
+#			motion = periodic_motion
+#		MotionType.SQUARE:
+#			motion = square_motion
 	match motion_type:
 		MotionType.SIMPLE:
-			motion = simple_motion
+			motion = SimpleMotion.new()
 		MotionType.PERIODIC:
-			motion = periodic_motion
+			motion = PeriodicMotion.new()
 		MotionType.SQUARE:
-			motion = square_motion
+			motion = SquareMotion.new()
 	property_list_changed_notify()

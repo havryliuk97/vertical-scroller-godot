@@ -1,15 +1,17 @@
 class_name AbstractLevel
 extends Node2D
 
+var spawner_queue
+var active_spawner:Spawner
+var spawner_idx := 0
 
 onready var enemies := $enemies
 onready var respawn_timer := $respawn_timer
 onready var respawn_screen := $hud/respanw_screen
 onready var respawn_counter := $hud/respanw_screen/respawn_hud/countdown
 onready var player_controller := $player_controller
+onready var spawners := $spawners
 
-
-var offset
 
 func _ready():
 	ScenesManager.set_current_level(self)
@@ -17,13 +19,15 @@ func _ready():
 	player_controller.connect("player_spawned", self, "_on_player_spawned")
 	_on_player_spawned(player_controller.player)
 	respawn_screen.hide()
-	offset = $spawner.position - player_controller.position
+	spawner_queue = $spawners.get_children()
+	active_spawner = spawner_queue[spawner_idx]
+	active_spawner.start_timer.start()
+	active_spawner.connect("units_destroyed", self, "_next_spawner")
 
 
 func _process(delta):
-	$spawner.position = player_controller.position + offset
 	if not player_controller.player:
-		respawn_counter.text = str(str(round(respawn_timer.time_left)))
+		respawn_counter.text = str(round(respawn_timer.time_left))
 
 
 func _on_player_killed():
@@ -33,6 +37,16 @@ func _on_player_killed():
 func _on_player_spawned(player:AbstractEntity):
 	print("player spawned received")
 	player.connect("player_fired", self, "_on_player_fired")
+
+
+func _next_spawner():
+	spawner_idx += 1
+	if spawner_idx < spawner_queue.size():
+		active_spawner = spawner_queue[spawner_idx]
+		active_spawner.start_timer.start()
+		active_spawner.connect("units_destroyed", self, "_next_spawner")
+	else:
+		print("Level Ended!")
 
 
 func _on_player_fired(Projectile:PackedScene, location: Vector2, vel: Vector2):

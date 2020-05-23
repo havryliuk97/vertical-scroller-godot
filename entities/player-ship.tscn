@@ -33,6 +33,7 @@ tracks/0/keys = {
 collision_mask = 12
 script = ExtResource( 2 )
 max_linear_vel = 200.0
+shoot = true
 muzzle_speed = 300.0
 
 [node name="hitbox" parent="." index="0"]
@@ -53,7 +54,7 @@ autostart = true
 anims/death = SubResource( 2 )
 
 [node name="fire_timer" type="Timer" parent="." index="4"]
-wait_time = 0.2
+wait_time = 0.3
 autostart = true
 
 [node name="muzzle_pos" type="Position2D" parent="." index="5"]

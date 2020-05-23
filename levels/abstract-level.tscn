@@ -51,6 +51,8 @@ text = "5"
 
 [node name="player_projectiles" type="Node" parent="."]
 
+[node name="spawners" type="Node" parent="."]
+
 [node name="enemies" type="Node" parent="."]
 
 [node name="player_controller" parent="." instance=ExtResource( 4 )]

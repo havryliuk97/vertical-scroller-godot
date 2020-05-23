@@ -1,4 +1,4 @@
-extends Resource
+extends PathMotion
 
 class_name SquareMotion
 

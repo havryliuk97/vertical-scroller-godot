@@ -19,7 +19,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://levels/abstract-level.gd"
 }, {
-"base": "Resource",
+"base": "SimpleMotion",
+"class": "PathMotion",
+"language": "GDScript",
+"path": "res://resources/path_motion.gd"
+}, {
+"base": "PathMotion",
 "class": "PeriodicMotion",
 "language": "GDScript",
 "path": "res://resources/periodic_motion.gd"
@@ -29,7 +34,12 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://resources/simple_motion.gd"
 }, {
-"base": "Resource",
+"base": "Node2D",
+"class": "Spawner",
+"language": "GDScript",
+"path": "res://other/spawner.gd"
+}, {
+"base": "PathMotion",
 "class": "SquareMotion",
 "language": "GDScript",
 "path": "res://resources/square_motion.gd"
@@ -37,8 +47,10 @@ _global_script_classes=[ {
 _global_script_class_icons={
 "AbstractEntity": "",
 "AbstractLevel": "",
+"PathMotion": "",
 "PeriodicMotion": "",
 "SimpleMotion": "",
+"Spawner": "",
 "SquareMotion": ""
 }
 
