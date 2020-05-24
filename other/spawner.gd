@@ -30,7 +30,7 @@ export(float) var start_delay := 0.0
 
 export(float) var spawn_delay := 0.1
 
-export(bool) var spawn_dummies := false setget set_spawn_dummies
+export(bool) var spawn_dummies := false
 
 var spawn_index := 0
 
@@ -47,9 +47,9 @@ var simple_motion: SimpleMotion
 var periodic_motion: PeriodicMotion
 var square_motion: SquareMotion
 
-onready var Dummy = preload("res://entities/spawner_dummy.tscn")
 onready var start_timer := $start_timer
 onready var delay_timer := $delay_timer
+onready var dummy_timer := $dummy_timer
 
 func _ready():
 	randomize()
@@ -62,8 +62,10 @@ func _ready():
 	
 	if start_delay != 0.0:
 		start_timer.wait_time = start_delay
-		
+	
 	delay_timer.wait_time = spawn_delay
+	dummy_timer.wait_time = spawn_delay
+	dummy_timer.start()
 	
 	units=spawn_count
 	
@@ -78,14 +80,17 @@ func _ready():
 
 
 func _process(delta):
+	for dummy in $dummies.get_children():
+		if dummy.position.y > 360 or dummy.position.y < -40:
+			dummy.queue_free()
+		if dummy.position.x > 270 or dummy.position.x < -30:
+			dummy.queue_free()
 	update()
 
 
 func spawn():
 	
 	if Engine.editor_hint:
-		if spawn_dummies:
-			spawn_dummy()
 		return
 	
 	level = ScenesManager.current_level
@@ -132,7 +137,10 @@ func spawn():
 
 
 func spawn_dummy():
-	print("Spwan dummy")
+	
+	if not (Engine.editor_hint and spawn_dummies):
+		return
+	
 	var index_arr = []
 	for n in range(spawn_points):
 		index_arr.append(n)
@@ -154,18 +162,19 @@ func spawn_dummy():
 		else:
 			spawn_index = 0
 		
-		var dummy = Dummy.instance()
-		dummy.position = global_position + spawn_offset.rotated(rotation)*spawn_index
-		if motion:
-			dummy.linear_vel = polar2cartesian(motion.vel_mag, deg2rad(motion.vel_angle))
-			dummy.linear_acc = polar2cartesian(motion.acc_mag, deg2rad(motion.acc_angle))
-			if motion as PathMotion:
-				dummy.path = motion.calc_path(global_position + spawn_offset.rotated(rotation)*spawn_index, rotation)
-			
-			dummy.get_node("delete_timer").start()
-			add_child(dummy)
-			
-			spawn_index += index_mult
+		if SpawnObj:
+			var dummy
+			dummy = SpawnObj.instance()
+			dummy.position = global_position + spawn_offset.rotated(rotation)*spawn_index
+			if motion:
+				dummy.linear_vel = polar2cartesian(motion.vel_mag, deg2rad(motion.vel_angle))
+				dummy.linear_acc = polar2cartesian(motion.acc_mag, deg2rad(motion.acc_angle))
+				if motion as PathMotion:
+					dummy.path = motion.calc_path(global_position + spawn_offset.rotated(rotation)*spawn_index, rotation)
+	
+				$dummies.add_child(dummy)
+				
+				spawn_index += index_mult
 
 
 func trigger_spawn():
@@ -191,14 +200,6 @@ func _draw():
 
 func set_units_per_spawn(value):
 	units_per_spawn = clamp(value, 1, spawn_points)
-
-
-func set_spawn_dummies(value):
-	if value:
-		trigger_spawn()
-	else:
-		delay_timer.stop()
-	spawn_dummies = value
 
 
 func _on_delay_timer_timeout():
@@ -232,3 +233,7 @@ func set_motion(value):
 		MotionType.SQUARE:
 			motion = SquareMotion.new()
 	property_list_changed_notify()
+
+
+func _on_dummy_timer_timeout():
+	spawn_dummy()

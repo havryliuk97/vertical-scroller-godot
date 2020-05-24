@@ -6,17 +6,17 @@
 [ext_resource path="res://resources/periodic_motion.gd" type="Script" id=4]
 [ext_resource path="res://resources/simple_motion.gd" type="Script" id=5]
 
-[sub_resource type="Resource" id=1]
+[sub_resource type="Resource" id=4]
 script = ExtResource( 4 )
 vel_mag = 100.0
-vel_angle = 26.0
+vel_angle = 19.655
 acc_mag = 0.0
 acc_angle = 0.0
 function = 0
-amplitude = 40.0
-period = 80.0
+amplitude = 50.0
+period = 100.0
 lenght = 400
-step = 20
+step = 12
 
 [sub_resource type="Resource" id=2]
 script = ExtResource( 5 )
@@ -27,18 +27,17 @@ acc_angle = 0.0
 
 [sub_resource type="Resource" id=3]
 script = ExtResource( 5 )
-vel_mag = 90.0
-vel_angle = 160.0
-acc_mag = 4.0
-acc_angle = 0.0
+vel_mag = 100.0
+vel_angle = 126.921
+acc_mag = 2.0
+acc_angle = 66.207
 
 [node name="level" instance=ExtResource( 1 )]
 
 [node name="spawner" parent="spawners" index="0" instance=ExtResource( 2 )]
-visible = false
 position = Vector2( 160, -9 )
 motion_type = 1
-motion = SubResource( 1 )
+motion = SubResource( 4 )
 SpawnObj = ExtResource( 3 )
 autostart = false
 spawn_count = 10
@@ -59,13 +58,13 @@ start_delay = 1.0
 spawn_delay = 0.5
 
 [node name="spawner3" parent="spawners" index="2" instance=ExtResource( 2 )]
+visible = false
 position = Vector2( 90, -9 )
 motion = SubResource( 3 )
 SpawnObj = ExtResource( 3 )
 spawn_points = 5
 spawn_offset = Vector2( 20, 0 )
-spawn_sequence = 1
 autostart = false
 spawn_count = 20
 start_delay = 1.0
-spawn_delay = 0.5
+spawn_delay = 0.1

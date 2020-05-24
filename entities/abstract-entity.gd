@@ -1,3 +1,5 @@
+tool
+
 class_name AbstractEntity
 extends KinematicBody2D
 # Abstract entity class to be exended by other game objects

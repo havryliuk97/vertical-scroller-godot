@@ -1,3 +1,5 @@
+tool
+
 extends AbstractEntity
 
 onready var DeathEffect := preload("res://effects/explosion.tscn")
