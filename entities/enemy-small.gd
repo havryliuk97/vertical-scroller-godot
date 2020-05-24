@@ -3,12 +3,22 @@ extends AbstractEntity
 onready var DeathEffect := preload("res://effects/explosion.tscn")
 
 
+func _update(delta):
+	if collision_info:
+		var collider = collision_info.collider
+		var layer = collider.get_collision_layer()
+		if layer == 2:
+			kill()
+			collider.queue_free()
+
+
 func kill():
 	$hitbox.hide()
 	$hitbox.disabled = true
 	$sprite.hide()
 	$anim_timer.stop()
 	$anim_player.play("death")
+	path = null
 	$tween.interpolate_property(self, "linear_vel", linear_vel, Vector2.ZERO, 0.6, Tween.TRANS_LINEAR, Tween.EASE_IN)
 	$tween.start()
 

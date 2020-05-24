@@ -28,6 +28,12 @@ func _ready():
 func _process(delta):
 	if not player_controller.player:
 		respawn_counter.text = str(round(respawn_timer.time_left))
+	for enemy in $enemies.get_children():
+		if enemy.global_position.y > 360.0:
+			enemy.queue_free()
+	for projectile in $player_projectiles.get_children():
+		if projectile.global_position.y < -10.0:
+			projectile.queue_free()
 
 
 func _on_player_killed():
