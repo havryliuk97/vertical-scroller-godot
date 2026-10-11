@@ -17,11 +17,11 @@ func get_team_layer(team, bit_offset = 0):
 	
 	return team_first_bit << (bit_offset * TEAMS_COUNT)
 
-func get_team_mask(team):
-	var team_layers_mask = 0
-	for i in LAYERS_PER_TEAM:
-		team_layers_mask += get_team_layer(team, i)
-	
-	var all_teams_mask = pow(2, TEAMS_COUNT*LAYERS_PER_TEAM) - 1 #get mask that represents all teams reserved bits set to 1
-	
-	return all_teams_mask - team_layers_mask
+# mask of one layer (by bit_offset) of every team except the given one, like 0 -> opponents entities
+func get_opponents_mask(team, bit_offset = 0):
+	var mask = 0
+	for t in range(1, TEAMS_COUNT + 1):
+		if t != team:
+			mask |= get_team_layer(t, bit_offset)
+
+	return mask

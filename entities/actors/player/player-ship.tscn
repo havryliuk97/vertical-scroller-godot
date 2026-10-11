@@ -20,7 +20,7 @@ script = ExtResource("1")
 lean_frames_count = 1
 hp = 1.0
 auto_attack = true
-team = 2
+team = 1
 max_linear_vel = 300.0
 max_linear_acc = 100.0
 

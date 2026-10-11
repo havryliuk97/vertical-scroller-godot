@@ -17,6 +17,7 @@ func _handle_collision(collision: KinematicCollision2D):
 func set_team(value):
 	team = value
 	collision_layer = Teams.get_team_layer(team, Teams.PARTICLES_BIT_OFFSET)
+	collision_mask = Teams.get_opponents_mask(team)
 
 
 func _on_hit():

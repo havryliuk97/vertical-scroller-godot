@@ -45,7 +45,8 @@ func hit(damage: float):
 func set_team(value):
 	team = value
 	collision_layer = Teams.get_team_layer(team)
-	collision_mask = Teams.get_team_mask(team)
+	# projectiles detect actors themselves, so actors only collide with opposing actors
+	collision_mask = Teams.get_opponents_mask(team)
 
 
 func kill():
