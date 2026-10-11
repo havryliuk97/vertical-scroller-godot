@@ -1,63 +1,139 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://assets/fonts/pixelart.ttf" type="DynamicFontData" id=1]
+[ext_resource path="res://assets/fonts/pixelart.ttf" type="FontFile" id=1]
 [ext_resource path="res://levels/abstract-level.gd" type="Script" id=2]
 [ext_resource path="res://other/background.tscn" type="PackedScene" id=3]
 [ext_resource path="res://other/player_controller.tscn" type="PackedScene" id=4]
 
-[sub_resource type="DynamicFont" id=1]
+[sub_resource type="FontFile" id=1]
 size = 32
 font_data = ExtResource( 1 )
 
-[node name="level" type="Node2D"]
+[sub_resource type="RectangleShape2D" id=2]
+size = Vector2( 213, 17 )
+
+[sub_resource type="RectangleShape2D" id=3]
+size = Vector2( 16.5, 212 )
+
+[sub_resource type="RectangleShape2D" id=4]
+size = Vector2( 16.5, 212 )
+
+[node name="Level" type="Node2D"]
 position = Vector2( -1, 0 )
 script = ExtResource( 2 )
 
 [node name="bg" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, 0 )
 
 [node name="hud" type="CanvasLayer" parent="."]
 
 [node name="respanw_screen" type="Control" parent="hud"]
-visible = false
-margin_right = 160.0
-margin_bottom = 320.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="overlay" type="ColorRect" parent="hud/respanw_screen"]
-margin_right = 160.0
-margin_bottom = 320.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 color = Color( 0.0862745, 0.0196078, 0.0196078, 0.627451 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="respawn_hud" type="CenterContainer" parent="hud/respanw_screen"]
-margin_right = 160.0
-margin_bottom = 320.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="countdown" type="Label" parent="hud/respanw_screen/respawn_hud"]
-margin_left = 70.0
-margin_top = 146.0
-margin_right = 90.0
-margin_bottom = 174.0
-custom_fonts/font = SubResource( 1 )
+offset_left = 80.0
+offset_top = 146.0
+offset_right = 100.0
+offset_bottom = 174.0
+theme_override_fonts/font = SubResource( 1 )
 text = "5"
-
-[node name="player_projectiles" type="Node" parent="."]
 
 [node name="spawners" type="Node" parent="."]
 
-[node name="enemies" type="Node" parent="."]
+[node name="entities" type="Node" parent="."]
+
+[node name="effects" type="Node" parent="."]
 
 [node name="player_controller" parent="." instance=ExtResource( 4 )]
 
 [node name="respawn_timer" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
+
+[node name="camera" type="Camera2D" parent="."]
+position = Vector2( 128, 311 )
+current = true
+limit_left = 0
+limit_top = 0
+limit_right = 256
+limit_bottom = 320
+drag_horizontal_enabled = true
+drag_vertical_offset = -1.0
+drag_left_margin = 0.3
+drag_top_margin = 0.8
+drag_right_margin = 0.3
+drag_bottom_margin = 0.8
+editor_draw_limits = true
+
+[node name="player_spawn" type="Marker2D" parent="."]
+position = Vector2( 128, 296 )
+
+[node name="erasers" type="Node" parent="."]
+
+[node name="eraser_top" type="Area2D" parent="erasers"]
+collision_layer = 4
+collision_mask = 255
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="erasers/eraser_top"]
+position = Vector2( 127, -66 )
+shape = SubResource( 2 )
+
+[node name="eraser_right" type="Area2D" parent="erasers"]
+position = Vector2( 325, -25 )
+collision_layer = 4
+collision_mask = 255
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="erasers/eraser_right"]
+position = Vector2( -1.5, 188 )
+shape = SubResource( 3 )
+
+[node name="eraser_bottom" type="Area2D" parent="erasers"]
+position = Vector2( 0, 458 )
+collision_layer = 4
+collision_mask = 255
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="erasers/eraser_bottom"]
+position = Vector2( 127, -66 )
+shape = SubResource( 2 )
+
+[node name="eraser_left" type="Area2D" parent="erasers"]
+position = Vector2( -68, -25 )
+collision_layer = 4
+collision_mask = 255
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="erasers/eraser_left"]
+position = Vector2( -1.5, 188 )
+shape = SubResource( 4 )
+
 [connection signal="timeout" from="respawn_timer" to="." method="_on_respawn_timer_timeout"]

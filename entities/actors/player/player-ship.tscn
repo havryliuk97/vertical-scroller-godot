@@ -1,0 +1,47 @@
+[gd_scene load_steps=10 format=3 uid="uid://cbkkqojecxanc"]
+
+[ext_resource type="Script" uid="uid://g5841xt4djj3" path="res://entities/actors/player/player-ship.gd" id="1"]
+[ext_resource type="PackedScene" path="res://entities/actor.tscn" id="2"]
+[ext_resource type="Resource" path="res://entities/actors/player/player_attack_params.tres" id="3"]
+[ext_resource type="Shader" uid="uid://vf14x5fsukpe" path="res://shaders/default-entity-shader.gdshader" id="3_6d5gr"]
+[ext_resource type="Texture2D" uid="uid://bxpy8808l8ny0" path="res://assets/spritesheets/player-2.png" id="4_8qtxj"]
+[ext_resource type="PackedScene" path="res://entities/projectiles/bullet.tscn" id="5"]
+[ext_resource type="Script" uid="uid://8vjumkf0wfnf" path="res://entities/actors/attacs/shoot.gd" id="6"]
+
+[sub_resource type="CircleShape2D" id="1"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gaxfm"]
+resource_local_to_scene = true
+shader = ExtResource("3_6d5gr")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[node name="PlayerShip" instance=ExtResource("2")]
+script = ExtResource("1")
+lean_frames_count = 1
+hp = 1.0
+auto_attack = true
+team = 2
+max_linear_vel = 300.0
+max_linear_acc = 100.0
+
+[node name="hitbox" parent="." index="0"]
+position = Vector2(0, 2)
+shape = SubResource("1")
+
+[node name="sprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_gaxfm")
+texture = ExtResource("4_8qtxj")
+hframes = 3
+frame = 1
+
+[node name="muzzle_pos" type="Marker2D" parent="." index="2"]
+unique_name_in_owner = true
+position = Vector2(0, -15)
+
+[node name="shoot" type="Node" parent="attacks" index="0"]
+script = ExtResource("6")
+projectile_scene = ExtResource("5")
+muzzle_pos_path = NodePath("../../muzzle_pos")
+muzzle_vel = 300.0
+muzzle_direction = Vector2(0, -1)
+params = ExtResource("3")

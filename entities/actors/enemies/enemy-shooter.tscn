@@ -1,0 +1,57 @@
+[gd_scene load_steps=11 format=3 uid="uid://d4i5hotxstnii"]
+
+[ext_resource type="PackedScene" path="res://entities/actor.tscn" id="1"]
+[ext_resource type="Texture2D" uid="uid://du0u71prdnevg" path="res://assets/spritesheets/enemy-shooter.png" id="2"]
+[ext_resource type="Script" uid="uid://bhl0sncpb4rf0" path="res://entities/actors/enemies/enemy-shooter.gd" id="3"]
+[ext_resource type="Shader" uid="uid://vf14x5fsukpe" path="res://shaders/default-entity-shader.gdshader" id="3_xpbgh"]
+[ext_resource type="PackedScene" path="res://entities/projectiles/energy-sphere.tscn" id="4"]
+[ext_resource type="Script" uid="uid://8vjumkf0wfnf" path="res://entities/actors/attacs/shoot.gd" id="5"]
+[ext_resource type="Script" uid="uid://cblomooa1tdtf" path="res://entities/actors/attacs/attack-params.gd" id="6"]
+
+[sub_resource type="CircleShape2D" id="1"]
+radius = 9.0
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_cdd7b"]
+resource_local_to_scene = true
+shader = ExtResource("3_xpbgh")
+shader_parameter/outline_color = Color(1, 1, 1, 1)
+
+[sub_resource type="Resource" id="2"]
+script = ExtResource("6")
+delay = 2.0
+
+[node name="EnemyShooter" instance=ExtResource("1")]
+script = ExtResource("3")
+lean_frames_count = 1
+hp = 2.0
+auto_attack = true
+team = 2
+max_linear_vel = 130.0
+max_linear_acc = 20.0
+
+[node name="hitbox" parent="." index="0"]
+shape = SubResource("1")
+
+[node name="sprite" parent="." index="1"]
+material = SubResource("ShaderMaterial_cdd7b")
+texture = ExtResource("2")
+hframes = 3
+frame = 1
+
+[node name="ShootProjectile" type="Node" parent="attacks" index="0"]
+script = ExtResource("5")
+projectile_scene = ExtResource("4")
+muzzle_pos_path = NodePath("../../muzzle_pos_left")
+params = SubResource("2")
+
+[node name="ShootProjectile2" type="Node" parent="attacks" index="1"]
+script = ExtResource("5")
+projectile_scene = ExtResource("4")
+muzzle_pos_path = NodePath("../../muzzle_pos_right")
+params = SubResource("2")
+
+[node name="muzzle_pos_left" type="Marker2D" parent="." index="3"]
+position = Vector2(-5, 10)
+
+[node name="muzzle_pos_right" type="Marker2D" parent="." index="4"]
+position = Vector2(5, 10)

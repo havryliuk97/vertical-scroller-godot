@@ -1,0 +1,68 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://other/background.tscn" type="PackedScene" id=1]
+[ext_resource path="res://screens/title-screen.gd" type="Script" id=2]
+[ext_resource path="res://assets/hud/Button-Orange-Big-down.png" type="Texture2D" id=3]
+[ext_resource path="res://assets/hud/Window-Frame.png" type="Texture2D" id=4]
+[ext_resource path="res://assets/hud/Button-Orange-Big-up.png" type="Texture2D" id=5]
+[ext_resource path="res://assets/fonts/pixelart.ttf" type="FontFile" id=6]
+
+[sub_resource type="FontFile" id=1]
+size = 8
+font_data = ExtResource( 6 )
+
+[node name="title_screen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 2 )
+__meta__ = {
+"_edit_horizontal_guides_": [ 9.0 ]
+}
+
+[node name="bg" parent="." instance=ExtResource( 1 )]
+
+[node name="center_container" type="CenterContainer" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="window" type="TextureRect" parent="center_container"]
+offset_left = 25.0
+offset_top = 109.0
+offset_right = 155.0
+offset_bottom = 211.0
+texture = ExtResource( 4 )
+
+[node name="buttons" type="VBoxContainer" parent="center_container/window"]
+anchor_left = 0.362
+anchor_right = 0.638
+anchor_bottom = 1.0
+offset_left = -0.0600014
+offset_right = 0.0599976
+alignment = 1
+
+[node name="play_button" type="TextureButton" parent="center_container/window/buttons"]
+offset_top = 42.0
+offset_right = 36.0
+offset_bottom = 60.0
+pivot_offset = Vector2( 0, 18 )
+texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 3 )
+
+[node name="CenterContainer" type="CenterContainer" parent="center_container/window/buttons/play_button"]
+anchor_right = 1.0
+anchor_bottom = 0.7
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="center_container/window/buttons/play_button/CenterContainer"]
+offset_left = 6.0
+offset_top = 2.0
+offset_right = 30.0
+offset_bottom = 9.0
+theme_override_fonts/font = SubResource( 1 )
+text = "Play"
+uppercase = true
+
+[connection signal="pressed" from="center_container/window/buttons/play_button" to="." method="_on_play_button_pressed"]

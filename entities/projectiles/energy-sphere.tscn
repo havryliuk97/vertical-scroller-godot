@@ -1,0 +1,66 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://entities/projectiles/projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://assets/spritesheets/projectiles-2.png" type="Texture2D" id=2]
+[ext_resource path="res://entities/projectiles/energy-sphere.gd" type="Script" id=3]
+
+[sub_resource type="CircleShape2D" id=3]
+radius = 4.0
+
+[sub_resource type="Animation" id=1]
+resource_name = "hit"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PackedFloat32Array( 0, 0.1, 0.2 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
+"update": 1,
+"values": [ 5, 6, 7 ]
+}
+
+[sub_resource type="Animation" id=2]
+resource_name = "pulse"
+length = 0.6
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("sprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PackedFloat32Array( 0, 0.2, 0.4 ),
+"transitions": PackedFloat32Array( 1, 1, 1 ),
+"update": 1,
+"values": [ 2, 3, 1 ]
+}
+
+[node name="EnergySphere" instance=ExtResource( 1 )]
+script = ExtResource( 3 )
+
+[node name="hitbox" parent="." index="0"]
+shape = SubResource( 3 )
+
+[node name="sprite" parent="." index="1"]
+material = null
+texture = ExtResource( 2 )
+hframes = 4
+vframes = 2
+frame = 2
+
+[node name="animation" type="AnimationPlayer" parent="." index="2"]
+autoplay = "pulse"
+anims/hit = SubResource( 1 )
+anims/pulse = SubResource( 2 )
+
+[node name="removat_timer" type="Timer" parent="." index="3"]
+wait_time = 1.5
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="removat_timer" to="." method="_on_removat_timer_timeout"]

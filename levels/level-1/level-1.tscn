@@ -1,70 +1,133 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://levels/abstract-level.tscn" type="PackedScene" id=1]
-[ext_resource path="res://other/spawner.tscn" type="PackedScene" id=2]
-[ext_resource path="res://entities/enemy-small.tscn" type="PackedScene" id=3]
-[ext_resource path="res://resources/periodic_motion.gd" type="Script" id=4]
-[ext_resource path="res://resources/simple_motion.gd" type="Script" id=5]
+[ext_resource path="res://entities/actors/enemies/enemy-shooter.tscn" type="PackedScene" id=2]
+[ext_resource path="res://other/spawner.gd" type="Script" id=3]
+[ext_resource path="res://entities/actors/enemies/enemy-small.tscn" type="PackedScene" id=5]
+[ext_resource path="res://ai/commands/follow-path.gd" type="Script" id=6]
 
-[sub_resource type="Resource" id=4]
-script = ExtResource( 4 )
-vel_mag = 100.0
-vel_angle = 19.655
-acc_mag = 0.0
-acc_angle = 0.0
-function = 0
-amplitude = 50.0
-period = 100.0
-lenght = 400
-step = 12
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PackedVector2Array( -0.134643, -23.9863, 0.134643, 23.9863, 208, 0, 0.0421272, -29.8788, -0.0421272, 29.8788, 48, 72, -0.0225071, -34.9607, 0.0225071, 34.9607, 208, 144, -0.320503, -31.8525, 0.320503, 31.8525, 48, 216, -0.860816, -32.9744, 0.860816, 32.9744, 208, 280, -0.0791082, -23.1027, 0.0791082, 23.1027, 48, 320, 0, 0, 0, 0, 48, 416 )
+}
 
-[sub_resource type="Resource" id=2]
-script = ExtResource( 5 )
-vel_mag = 100.0
-vel_angle = 61.0
-acc_mag = 0.0
-acc_angle = 0.0
-
-[sub_resource type="Resource" id=3]
-script = ExtResource( 5 )
-vel_mag = 100.0
-vel_angle = 126.921
-acc_mag = 2.0
-acc_angle = 66.207
+[sub_resource type="Curve2D" id=1]
+_data = {
+"points": PackedVector2Array( -0.134643, -23.9863, 0.134643, 23.9863, 48, 0, 0.0421272, -29.8788, -0.0421272, 29.8788, 208, 72, -0.0225071, -34.9607, 0.0225071, 34.9607, 48, 144, -0.320503, -31.8525, 0.320503, 31.8525, 208, 216, -0.860816, -32.9744, 0.860816, 32.9744, 48, 280, -0.0791082, -23.1027, 0.0791082, 23.1027, 208, 320, 0, 0, 0, 0, 208, 416 )
+}
 
 [node name="level" instance=ExtResource( 1 )]
+__meta__ = {
+"_edit_lock_": true
+}
 
-[node name="spawner" parent="spawners" index="0" instance=ExtResource( 2 )]
-position = Vector2( 160, -9 )
-motion_type = 1
-motion = SubResource( 4 )
-SpawnObj = ExtResource( 3 )
-autostart = false
-spawn_count = 10
-start_delay = 0.1
-spawn_delay = 0.5
+[node name="bg" parent="." index="0"]
+__meta__ = {
+"_edit_lock_": true
+}
 
-[node name="spawner2" parent="spawners" index="1" instance=ExtResource( 2 )]
+[node name="respanw_screen" parent="hud" index="0"]
 visible = false
-position = Vector2( 31, -9 )
-motion = SubResource( 2 )
-SpawnObj = ExtResource( 3 )
-spawn_points = 5
-spawn_offset = Vector2( 20, 0 )
-spawn_sequence = 2
-autostart = false
-spawn_count = 10
-start_delay = 1.0
-spawn_delay = 0.5
 
-[node name="spawner3" parent="spawners" index="2" instance=ExtResource( 2 )]
-visible = false
-position = Vector2( 90, -9 )
-motion = SubResource( 3 )
-SpawnObj = ExtResource( 3 )
-spawn_points = 5
-spawn_offset = Vector2( 20, 0 )
-autostart = false
-spawn_count = 20
+[node name="Spawner" type="Node2D" parent="spawners" index="0"]
+position = Vector2( 80, -9 )
+script = ExtResource( 3 )
+finish_condition = 1
+SpawnObj = ExtResource( 5 )
+initial_velocity = Vector2( 0, 200 )
+spawn_count = 5
 start_delay = 1.0
-spawn_delay = 0.1
+spawn_delay = 0.3
+
+[node name="Spawner4" type="Node2D" parent="spawners" index="1"]
+position = Vector2( 180, -7 )
+script = ExtResource( 3 )
+SpawnObj = ExtResource( 5 )
+initial_velocity = Vector2( 0, 200 )
+spawn_count = 5
+spawn_delay = 0.3
+
+[node name="Spawner5" type="Node2D" parent="spawners" index="2"]
+position = Vector2( 278, 57 )
+script = ExtResource( 3 )
+SpawnObj = ExtResource( 5 )
+initial_velocity = Vector2( -200, 200 )
+spawn_count = 10
+spawn_delay = 0.3
+
+[node name="Spawner6" type="Node2D" parent="spawners" index="3"]
+position = Vector2( -25, 57 )
+script = ExtResource( 3 )
+finish_condition = 1
+SpawnObj = ExtResource( 5 )
+initial_velocity = Vector2( 200, 200 )
+spawn_count = 10
+spawn_delay = 0.3
+
+[node name="Spawner3" type="Node2D" parent="spawners" index="4"]
+position = Vector2( 208, -7 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+finish_condition = 0
+SpawnObj = ExtResource( 5 )
+spawn_count = 6
+start_delay = 0.5
+spawn_delay = 0.4
+
+[node name="FollowPath" type="Node" parent="spawners/Spawner3" index="0"]
+script = ExtResource( 6 )
+path_bake_interval = 20.0
+arrive_threshold = 5.0
+
+[node name="Path2D" type="Path2D" parent="spawners/Spawner3/FollowPath" index="0"]
+curve = SubResource( 2 )
+
+[node name="Spawner2" type="Node2D" parent="spawners" index="5"]
+position = Vector2( 48, -9 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true,
+"_edit_lock_": true
+}
+SpawnObj = ExtResource( 5 )
+spawn_count = 6
+start_delay = 0.5
+spawn_delay = 0.4
+
+[node name="FollowPath" type="Node" parent="spawners/Spawner2" index="0"]
+script = ExtResource( 6 )
+path_bake_interval = 20.0
+arrive_threshold = 5.0
+
+[node name="Path2D" type="Path2D" parent="spawners/Spawner2/FollowPath" index="0"]
+curve = SubResource( 1 )
+
+[node name="Spawner7" type="Node2D" parent="spawners" index="6"]
+position = Vector2( 278, 15 )
+script = ExtResource( 3 )
+finish_condition = 1
+SpawnObj = ExtResource( 2 )
+initial_velocity = Vector2( -200, 200 )
+spawn_count = 5
+start_delay = 1.0
+spawn_delay = 0.6
+
+[node name="Spawner8" type="Node2D" parent="spawners" index="7"]
+position = Vector2( -25, 15 )
+script = ExtResource( 3 )
+SpawnObj = ExtResource( 2 )
+initial_velocity = Vector2( 200, 200 )
+spawn_count = 5
+start_delay = 0.6
+spawn_delay = 0.6
+
+[node name="player_controller" parent="." index="5"]
+__meta__ = {
+"_edit_lock_": true
+}
+
+[node name="respawn_timer" parent="." index="6"]
+wait_time = 3.0

@@ -1,68 +1,99 @@
 class_name AbstractLevel
 extends Node2D
 
+signal player_set(player)
+
+@export var player_scene: PackedScene = preload("res://entities/actors/player/player-ship.tscn")
+
 var spawner_queue
 var active_spawner:Spawner
-var spawner_idx := 0
+var player: Actor: set = set_player
 
-onready var enemies := $enemies
-onready var respawn_timer := $respawn_timer
-onready var respawn_screen := $hud/respanw_screen
-onready var respawn_counter := $hud/respanw_screen/respawn_hud/countdown
-onready var player_controller := $player_controller
-onready var spawners := $spawners
-
+@onready var entities := $entities
+@onready var respawn_timer := $respawn_timer
+@onready var respawn_screen := $hud/respanw_screen
+@onready var respawn_counter := $hud/respanw_screen/respawn_hud/countdown
+@onready var player_controller := $player_controller
+@onready var spawners := $spawners
+@onready var camera := $camera
+@onready var player_spawn := $player_spawn
+@onready var erasers := $erasers
 
 func _ready():
-	ScenesManager.set_current_level(self)
-	player_controller.connect("player_killed", self, "_on_player_killed")
-	player_controller.connect("player_spawned", self, "_on_player_spawned")
-	_on_player_spawned(player_controller.player)
 	respawn_screen.hide()
-	spawner_queue = $spawners.get_children()
-	active_spawner = spawner_queue[spawner_idx]
-	active_spawner.start_timer.start()
-	active_spawner.connect("units_destroyed", self, "_next_spawner")
+	
+	for eraser in erasers.get_children():
+		if(eraser is Area2D):
+			eraser.connect("body_entered", Callable(self, "_clear_body"))
+	
+	spawn_player()
+	
+	_process_spawners()
 
 
-func _process(delta):
-	if not player_controller.player:
+func _physics_process(delta):
+	if player != null:
+		camera.position.x = player.position.x
+	else:
 		respawn_counter.text = str(round(respawn_timer.time_left))
-	for enemy in $enemies.get_children():
-		if enemy.global_position.y > 360.0:
-			enemy.queue_free()
-	for projectile in $player_projectiles.get_children():
-		if projectile.global_position.y < -10.0:
-			projectile.queue_free()
+
+
+func _process_spawners():
+	spawner_queue = $spawners.get_children()
+	
+	for spawner in spawner_queue:
+		active_spawner = spawner as Spawner
+		
+		active_spawner.start_spawning()
+		
+		await active_spawner.finish_condition_reached
+		
+		active_spawner = null
+	
+	print("Level Ended!")
+
+
+func spawn_player():
+	if not player:
+		set_player(player_scene.instantiate() as Actor)
+		
+		player.position = player_spawn.global_position
+		
+		player_controller.player = player
+		
+		player.team = Teams.Options.PLAYER_TEAM
+		
+		add_entity(player)
+
+
+func add_entity(entity: AbstractEntity):
+	entities.add_child(entity)
+
+
+func add_effect(node):
+	$effects.add_child(node)
+
+
+func set_player(new_player: Actor):
+	player = new_player
+	if player != null:
+		player.connect("killed", Callable(self, "_on_player_killed"))
+	
+	player_controller.player = player
+	emit_signal("player_set", player)
 
 
 func _on_player_killed():
+	set_player(null)
 	respawn_screen.show()
 	respawn_timer.start()
 
-func _on_player_spawned(player:AbstractEntity):
-	print("player spawned received")
-	player.connect("player_fired", self, "_on_player_fired")
-
-
-func _next_spawner():
-	spawner_idx += 1
-	if spawner_idx < spawner_queue.size():
-		active_spawner = spawner_queue[spawner_idx]
-		active_spawner.start_timer.start()
-		active_spawner.connect("units_destroyed", self, "_next_spawner")
-	else:
-		print("Level Ended!")
-
-
-func _on_player_fired(Projectile:PackedScene, location: Vector2, vel: Vector2):
-	var projectile:AbstractEntity = Projectile.instance()
-	projectile.global_position = location
-	projectile.linear_vel = vel
-	projectile.rotation = vel.angle()
-	$player_projectiles.add_child(projectile)
 
 
 func _on_respawn_timer_timeout():
 	respawn_screen.hide()
-	player_controller.spawn_player()
+	spawn_player()
+
+
+func _clear_body(body: CharacterBody2D):
+	body.queue_free()

@@ -6,74 +6,33 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
+config_version=5
 
-_global_script_classes=[ {
-"base": "KinematicBody2D",
-"class": "AbstractEntity",
-"language": "GDScript",
-"path": "res://entities/abstract-entity.gd"
-}, {
-"base": "Node2D",
-"class": "AbstractLevel",
-"language": "GDScript",
-"path": "res://levels/abstract-level.gd"
-}, {
-"base": "SimpleMotion",
-"class": "PathMotion",
-"language": "GDScript",
-"path": "res://resources/path_motion.gd"
-}, {
-"base": "PathMotion",
-"class": "PeriodicMotion",
-"language": "GDScript",
-"path": "res://resources/periodic_motion.gd"
-}, {
-"base": "Resource",
-"class": "SimpleMotion",
-"language": "GDScript",
-"path": "res://resources/simple_motion.gd"
-}, {
-"base": "Node2D",
-"class": "Spawner",
-"language": "GDScript",
-"path": "res://other/spawner.gd"
-}, {
-"base": "PathMotion",
-"class": "SquareMotion",
-"language": "GDScript",
-"path": "res://resources/square_motion.gd"
-} ]
-_global_script_class_icons={
-"AbstractEntity": "",
-"AbstractLevel": "",
-"PathMotion": "",
-"PeriodicMotion": "",
-"SimpleMotion": "",
-"Spawner": "",
-"SquareMotion": ""
-}
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 
 [application]
 
 config/name="Vertical Scroller"
-run/main_scene="res://levels/title-screen.tscn"
-config/icon="res://icon.png"
+run/main_scene="res://game.tscn"
+config/features=PackedStringArray("4.7")
 
 [autoload]
 
-ScenesManager="*res://autoload/scenes-manager.gd"
+ScreensManager="*res://autoload/screens-manager.gd"
+Teams="*res://autoload/teams.gd"
+Steering="*res://autoload/steering.gd"
 
 [display]
 
-window/size/width=160
-window/size/height=320
-window/size/resizable=false
-window/size/test_width=320
-window/size/test_height=640
+window/size/viewport_width=180
+window/size/viewport_height=320
+window/size/window_width_override=360
+window/size/window_height_override=640
+window/stretch/mode="viewport"
+window/stretch/scale_mode="integer"
 window/handheld/orientation="portrait"
-window/stretch/mode="2d"
-window/stretch/aspect="keep"
 
 [importer_defaults]
 
@@ -83,7 +42,7 @@ texture={
 "compress/lossy_quality": 0.7,
 "compress/mode": 0,
 "compress/normal_map": 0,
-"detect_3d": true,
+"detect_3d": false,
 "flags/anisotropic": false,
 "flags/filter": false,
 "flags/mipmaps": false,
@@ -92,6 +51,7 @@ texture={
 "process/HDR_as_SRGB": false,
 "process/fix_alpha_border": true,
 "process/invert_color": false,
+"process/normal_map_invert_y": false,
 "process/premult_alpha": false,
 "size_limit": 0,
 "stream": false,
@@ -102,27 +62,27 @@ texture={
 
 left={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777231,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":65,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194319,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":65,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
 }
 right={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777233,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":68,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194321,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":68,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
 }
 up={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":87,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777232,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":87,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194320,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
 }
 down={
 "deadzone": 0.5,
-"events": [ Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":83,"unicode":0,"echo":false,"script":null)
-, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"alt":false,"shift":false,"control":false,"meta":false,"command":false,"pressed":false,"scancode":16777234,"unicode":0,"echo":false,"script":null)
- ]
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":83,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+, Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":0,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":4194322,"physical_keycode":0,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
 }
 
 [input_devices]
@@ -132,13 +92,26 @@ pointing/emulate_mouse_from_touch=false
 
 [layer_names]
 
-2d_physics/layer_1="player"
-2d_physics/layer_2="player_projectiles"
-2d_physics/layer_3="enemies"
-2d_physics/layer_4="enemies_projectiles"
+2d_physics/layer_1="team 1"
+2d_physics/layer_2="team 2"
+2d_physics/layer_3="team 3"
+2d_physics/layer_4="team 1 projectiles"
+2d_physics/layer_5="team 2 projectiles"
+2d_physics/layer_6="team 3 projectiles"
+2d_physics/layer_7="consumables"
+
+[physics]
+
+2d/default_gravity=0
+2d/default_gravity_vector=Vector2(0, 0)
 
 [rendering]
 
-quality/intended_usage/framebuffer_allocation=0
-quality/intended_usage/framebuffer_allocation.mobile=0
+textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_repeat=1
+renderer/rendering_method="gl_compatibility"
+2d/snap/snap_2d_transforms_to_pixel=true
+quality/intended_usage/framebuffer_allocation.mobile=2
+2d/snapping/use_gpu_pixel_snap=true
+quality/shadows/filter_mode=0
 quality/2d/use_pixel_snap=true

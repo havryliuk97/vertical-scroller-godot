@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://entities/abstract-entity.tscn" type="PackedScene" id=1]
+[ext_resource path="res://entities/projectiles/projectile.gd" type="Script" id=2]
+
+[node name="Projectile" instance=ExtResource( 1 )]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource( 2 )
+damage = 1.0
