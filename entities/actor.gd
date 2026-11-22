@@ -9,8 +9,14 @@ signal killed()
 @export var team := 2: set = set_team
 @onready var attacks := $attacks.get_children()
 
+var is_dead := false
+
 
 func _ready():
+	super._ready()
+	# team can be set while the scene is instantiated, before the hitbox exists
+	set_team(team)
+
 	for a in attacks:
 		if a is Attack:
 			a.team = team
@@ -23,11 +29,9 @@ func _physics_process(_delta):
 		attack()
 
 
-func _handle_collision(info: KinematicCollision2D):
-	var collider = info.get_collider()
-	
-	if collider.has_method("kill"):
-		collider.kill()
+func _handle_collision(other: AbstractEntity):
+	# both actors detect the overlap, so each one only kills itself
+	if other is Actor:
 		kill()
 
 func attack():
@@ -44,11 +48,22 @@ func hit(damage: float):
 
 func set_team(value):
 	team = value
-	collision_layer = Teams.get_team_layer(team)
 	# projectiles detect actors themselves, so actors only collide with opposing actors
-	collision_mask = Teams.get_opponents_mask(team)
+	set_hitbox_layers(Teams.get_team_layer(team), Teams.get_opponents_mask(team))
 
 
 func kill():
+	# several hits can land in the same physics frame
+	if is_dead:
+		return
+	is_dead = true
+
+	disable_hitbox()
+	_die()
 	emit_signal("killed")
 	queue_free()
+
+
+# death effects of a specific actor
+func _die():
+	pass

@@ -24,17 +24,17 @@ team = 1
 max_linear_vel = 300.0
 max_linear_acc = 100.0
 
-[node name="hitbox" parent="." index="0"]
+[node name="shape" parent="hitbox"]
 position = Vector2(0, 2)
 shape = SubResource("1")
 
-[node name="sprite" parent="." index="1"]
+[node name="sprite" parent="." index="0"]
 material = SubResource("ShaderMaterial_gaxfm")
 texture = ExtResource("4_8qtxj")
 hframes = 3
 frame = 1
 
-[node name="muzzle_pos" type="Marker2D" parent="." index="2"]
+[node name="muzzle_pos" type="Marker2D" parent="." index="3"]
 unique_name_in_owner = true
 position = Vector2(0, -15)
 

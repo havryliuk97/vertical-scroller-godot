@@ -15,11 +15,11 @@ hp = 1.0
 auto_attack = false
 lean_frames_count = 1
 
-[node name="hitbox" parent="." index="0"]
+[node name="shape" parent="hitbox"]
 position = Vector2( 0, -1 )
 shape = SubResource( 1 )
 
-[node name="sprite" parent="." index="1"]
+[node name="sprite" parent="." index="0"]
 texture = ExtResource( 2 )
 hframes = 3
 frame = 1

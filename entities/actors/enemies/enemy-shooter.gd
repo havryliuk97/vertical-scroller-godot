@@ -11,13 +11,9 @@ func _update(_delta):
 	sprite.frame = frame
 
 
-func kill():
-	hitbox.hide()
-	hitbox.disabled = true
+func _die():
 	sprite.hide()
 	_spawn_explosion()
-	
-	super.kill()
 
 
 func _spawn_explosion(radius:float = 1.0):

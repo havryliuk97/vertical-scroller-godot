@@ -35,7 +35,7 @@ texture = ExtResource("2")
 hframes = 3
 frame = 1
 
-[node name="hitbox" parent="." index="1"]
+[node name="shape" parent="hitbox"]
 shape = SubResource("1")
 
 [node name="ShootProjectile" type="Node" parent="attacks" index="0" unique_id=953170076]

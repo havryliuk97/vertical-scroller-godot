@@ -90,7 +90,7 @@ position = Vector2( 128, 296 )
 
 [node name="eraser_top" type="Area2D" parent="erasers"]
 position = Vector2( 128, -58 )
-collision_layer = 4
+collision_layer = 0
 collision_mask = 255
 __meta__ = {
 "_edit_group_": true,
@@ -102,7 +102,7 @@ shape = SubResource( 2 )
 
 [node name="eraser_right" type="Area2D" parent="erasers"]
 position = Vector2( 315, 160 )
-collision_layer = 4
+collision_layer = 0
 collision_mask = 255
 __meta__ = {
 "_edit_group_": true,
@@ -114,7 +114,7 @@ shape = SubResource( 3 )
 
 [node name="eraser_bottom" type="Area2D" parent="erasers"]
 position = Vector2( 128, 384 )
-collision_layer = 4
+collision_layer = 0
 collision_mask = 255
 __meta__ = {
 "_edit_group_": true,
@@ -126,7 +126,7 @@ shape = SubResource( 4 )
 
 [node name="eraser_left" type="Area2D" parent="erasers"]
 position = Vector2( -62, 160 )
-collision_layer = 4
+collision_layer = 0
 collision_mask = 255
 __meta__ = {
 "_edit_group_": true,

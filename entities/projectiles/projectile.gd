@@ -5,19 +5,23 @@ class_name Projectile
 
 var team : set = set_team
 
-func _handle_collision(collision: KinematicCollision2D):
+var _has_hit := false
+
+func _handle_collision(other: AbstractEntity):
+	# a projectile can overlap several actors in the same frame, it only hits the first one
+	if _has_hit or not other is Actor:
+		return
+	_has_hit = true
+
 	print("Projectile collided")
-	var collider = collision.get_collider()
-	if collider is Actor:
-		collider.hit(damage)
-	
+	other.hit(damage)
+
 	_on_hit()
 
 
 func set_team(value):
 	team = value
-	collision_layer = Teams.get_team_layer(team, Teams.PARTICLES_BIT_OFFSET)
-	collision_mask = Teams.get_opponents_mask(team)
+	set_hitbox_layers(Teams.get_team_layer(team, Teams.PARTICLES_BIT_OFFSET), Teams.get_opponents_mask(team))
 
 
 func _on_hit():

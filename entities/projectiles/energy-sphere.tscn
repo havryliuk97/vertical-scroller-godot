@@ -43,10 +43,10 @@ tracks/0/keys = {
 [node name="EnergySphere" instance=ExtResource( 1 )]
 script = ExtResource( 3 )
 
-[node name="hitbox" parent="." index="0"]
+[node name="shape" parent="hitbox"]
 shape = SubResource( 3 )
 
-[node name="sprite" parent="." index="1"]
+[node name="sprite" parent="." index="0"]
 material = null
 texture = ExtResource( 2 )
 hframes = 4

@@ -24,7 +24,7 @@ func _ready():
 	
 	for eraser in erasers.get_children():
 		if(eraser is Area2D):
-			eraser.connect("body_entered", Callable(self, "_clear_body"))
+			eraser.connect("area_entered", Callable(self, "_clear_entity"))
 	
 	spawn_player()
 	
@@ -95,5 +95,7 @@ func _on_respawn_timer_timeout():
 	spawn_player()
 
 
-func _clear_body(body: CharacterBody2D):
-	body.queue_free()
+func _clear_entity(hitbox: Area2D):
+	var entity = hitbox.get_parent()
+	if entity is AbstractEntity:
+		entity.queue_free()

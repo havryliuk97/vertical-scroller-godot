@@ -3,8 +3,7 @@ extends Projectile
 @onready var anim_player := $animation
 
 func _on_hit():
-	hitbox.hide()
-	hitbox.disabled = true
+	disable_hitbox()
 	
 	linear_vel = Vector2.ZERO
 	linear_acc = Vector2.ZERO
