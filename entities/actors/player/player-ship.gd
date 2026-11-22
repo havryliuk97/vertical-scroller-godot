@@ -14,14 +14,14 @@ func _update(_delta):
 	sprite.frame_coords = Vector2(lean_frames_count + sprite_frame_x, 0)
 
 
-func die():
-	emit_signal("killed")
+func kill():
 	hitbox.hide()
 	hitbox.disabled = true
 	sprite.hide()
 	linear_acc = Vector2.ZERO
 	_spawn_explosion()
-	queue_free()
+
+	super.kill()
 
 
 func _spawn_explosion(radius:float = 1.0):

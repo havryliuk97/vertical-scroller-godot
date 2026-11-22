@@ -22,9 +22,12 @@ func start():
 			path.curve.bake_interval = path_bake_interval
 			var curve_points = path.curve.get_baked_points()
 			path_points = Array(curve_points)
+			if path_points.is_empty():
+				printerr("Path2D has no points")
+				return
 			current_point = path_points.pop_front()
 		else:
-			printerr("Path3D not set")
+			printerr("Path2D not set")
 			return
 	super.start()
 
@@ -43,12 +46,14 @@ func _reach_point(point: Vector2) -> bool:
 
 
 func _execute(_delta): 
-	if(not actor or not path_points): return
-	
+	if(not actor or not path): return
+
 	var point_reached = _reach_point(current_point)
-	
+
 	if point_reached:
-		current_point = path_points.pop_front()
-		if not current_point:
+		# current_point was the last one, so the whole path is done
+		if path_points.is_empty():
 			actor.linear_acc = Vector2.ZERO
 			finish()
+		else:
+			current_point = path_points.pop_front()
