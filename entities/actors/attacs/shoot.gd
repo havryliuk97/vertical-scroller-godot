@@ -7,7 +7,7 @@ class_name ShootProjectile
 @export var muzzle_direction := Vector2.DOWN: set = _set_muzzle_direction
 
 
-var muzzle_pos: Marker2D
+@onready var muzzle_pos: Marker2D
 
 
 func _ready():
@@ -39,5 +39,6 @@ func _set_muzzle_direction(dir: Vector2):
 
 func _set_node_path(new_path: NodePath):
 	muzzle_pos_path = new_path
-	if muzzle_pos_path:
+	# while the scene is being instantiated the path can't be resolved yet, _ready() does it then
+	if muzzle_pos_path and is_inside_tree():
 		muzzle_pos = get_node(muzzle_pos_path)
