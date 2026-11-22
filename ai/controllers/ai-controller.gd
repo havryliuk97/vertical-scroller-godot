@@ -21,6 +21,9 @@ func set_actor(new_actor: AbstractEntity):
 
 func set_commands_queue(new_queue: CommandsQueue):
 	commands_queue = new_queue
+	# commands only run their _physics_process while inside the tree
+	if commands_queue.get_parent() == null:
+		add_child(commands_queue)
 	commands_queue.assign_actor(actor)
 
 
